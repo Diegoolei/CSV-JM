@@ -1,7 +1,8 @@
 #ifndef U02_LISTAS_LISTA_LISTA_H_
 #define U02_LISTAS_LISTA_LISTA_H_
 #include "nodo.h"
-
+#include <string>
+#include <stdlib.h>
 /**
  * Clase que implementa una Lista Enlasada generica, ya que puede
  * almacenar cualquier tipo de dato T
@@ -39,6 +40,12 @@ public:
   void vaciar();
 
   void print();
+
+  void print2();
+
+  int sumarDeposito();
+
+  bool MinimoStock(string dato1, string dato2, string dato3, string dato4, string dato5, int stockmin);
 };
 
 /**
@@ -165,7 +172,7 @@ void Lista<T>::insertarUltimo(T dato)
 }
 
 /**
- * Elimina el nodo en la posicion 'pos' de la lista enlasada
+ * Elimina el nodo en la posicion 'pos' de la lista enlazada
  * @tparam T
  * @param pos posicion del nodo a eliminar
  */
@@ -281,6 +288,68 @@ void Lista<T>::print()
     aux = aux->getSiguiente();
   }
   std::cout << "NULL" << std::endl;
+}
+
+template <class T>
+int Lista<T>::sumarDeposito()
+{
+  Nodo *aux = inicio;
+  int cont = 0, suma = 0, valor;
+  while (aux != nullptr)
+  {
+    if (aux->getDato() == "")
+      aux = aux->getSiguiente();
+    else
+    {
+      valor = stoi(aux->getDato());
+      suma += valor;
+      aux = aux->getSiguiente();
+    }
+    cont++;
+  }
+  return suma;
+}
+
+template <class T>
+bool Lista<T>::MinimoStock(string dato1, string dato2, string dato3, string dato4, string dato5, int stockmin)
+{
+
+  if (dato1 == "")
+    dato1 = "0";
+  if (dato2 == "")
+    dato2 = "0";
+  if (dato3 == "")
+    dato3 = "0";
+  if (dato4 == "")
+    dato4 = "0";
+  if (dato5 == "")
+    dato5 = "0";
+
+  int valor = 0;
+  bool bandera = false;
+  valor += stoi(dato1);
+  valor += stoi(dato2);
+  valor += stoi(dato3);
+  valor += stoi(dato4);
+  valor += stoi(dato5);
+
+  if (valor <= stockmin)
+    bandera = true;
+
+  return bandera;
+}
+
+template <class T>
+void Lista<T>::print2()
+{
+  Nodo *aux = inicio;
+  int cont = 1;
+  while (aux != nullptr)
+  {
+    cout << cont << ". " << aux->getDato() << endl;
+    aux = aux->getSiguiente();
+    cont++;
+  }
 }
 
 #endif // U02_LISTAS_LISTA_LISTA_H_
