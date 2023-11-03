@@ -21,17 +21,7 @@ int main()
     ifstream archivo;
     int cantArticulos, sumaProductos = 0, stockmin;
 
-    Lista <string> grupo;
-    Lista <string> barras;
-    Lista <string> articulo;
-    Lista <string> Dep1;
-    Lista <string> Dep2;
-    Lista <string> Dep3;
-    Lista <string> Dep4;
-    Lista <string> Dep5;
-    Lista <string> aux;
-
-    Lista <string> artmins;
+    Lista <string> grupo, barras, articulo, Dep1, Dep2, Dep3, Dep4, Dep5, aux, artmins;
 
     printf("Cual va a ser el stock minimo: ");
     std::cin >> stockmin;
