@@ -3,6 +3,8 @@
 #include "nodo.h"
 #include <string>
 #include <stdlib.h>
+
+using namespace std;
 /**
  * Clase que implementa una Lista Enlasada generica, ya que puede
  * almacenar cualquier tipo de dato T
@@ -293,8 +295,11 @@ void Lista<T>::print()
 template <class T>
 int Lista<T>::sumarDeposito()
 {
-  Nodo *aux = inicio;
-  int cont = 0, suma = 0, valor;
+  Nodo<T> *aux;
+  int count, suma, valor;
+  aux = inicio;
+  count = 0, suma = 0;
+
   while (aux != nullptr)
   {
     if (aux->getDato() == "")
@@ -305,14 +310,15 @@ int Lista<T>::sumarDeposito()
       suma += valor;
       aux = aux->getSiguiente();
     }
-    cont++;
+    count++; // Cantidad de articulos
   }
   return suma;
 }
 
-template <class T>
-bool Lista<T>::MinimoStock(string dato1, string dato2, string dato3, string dato4, string dato5, int stockmin)
+bool MinimoStock(string dato1, string dato2, string dato3, string dato4, string dato5, int stockmin)
 {
+  int valor;
+  bool bandera;
 
   if (dato1 == "")
     dato1 = "0";
@@ -325,30 +331,22 @@ bool Lista<T>::MinimoStock(string dato1, string dato2, string dato3, string dato
   if (dato5 == "")
     dato5 = "0";
 
-  int valor = 0;
-  bool bandera = false;
-  valor += stoi(dato1);
-  valor += stoi(dato2);
-  valor += stoi(dato3);
-  valor += stoi(dato4);
-  valor += stoi(dato5);
-
-  if (valor <= stockmin)
-    bandera = true;
-
+  valor = stoi(dato1) + stoi(dato2) + stoi(dato3) + stoi(dato4) + stoi(dato5);
+  bandera = valor <= stockmin;
+  
   return bandera;
 }
 
 template <class T>
 void Lista<T>::print2()
 {
-  Nodo *aux = inicio;
-  int cont = 1;
+  Nodo<T> *aux;
+  int count = 1;
   while (aux != nullptr)
   {
-    cout << cont << ". " << aux->getDato() << endl;
+    cout << count << ". " << aux->getDato() << endl;
     aux = aux->getSiguiente();
-    cont++;
+    count++;
   }
 }
 

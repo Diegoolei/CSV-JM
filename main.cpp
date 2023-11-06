@@ -12,34 +12,33 @@ using namespace std;
 int main()
 {
     clock_t begin;
-
+    ifstream archivo;
+    int cantArticulos, sumaProductos = 0, stockmin;
+    Lista <string> grupo, barras, articulo, Dep1, Dep2, Dep3, Dep4, Dep5, aux, artmins;
+    string linea;
+    char delimitador = ';'; // Va a ser el separador de los diferentes datos
+    clock_t end;
+    stringstream stream(linea);
+    string Grupo, CodigoBarras, Articulo, Deposito1, Deposito2, Deposito3, Deposito4, Deposito5;
+    double elapsed_secs;
     cout << "Comenzando a medir Tiempo\n"
          << endl;
 
     begin = clock();
 
-    ifstream archivo;
-    int cantArticulos, sumaProductos = 0, stockmin;
-
-    Lista <string> grupo, barras, articulo, Dep1, Dep2, Dep3, Dep4, Dep5, aux, artmins;
-
     printf("Cual va a ser el stock minimo: ");
-    std::cin >> stockmin;
+    cin >> stockmin;
 
     archivo.open("Inventariado Fisico.csv", ios::in); // Abrimos el archivo en modo lectura
     if (archivo.fail())                               // Notificamos en caso de error
         cout << "Error";
 
-    string linea;
 
-    char delimitador = ';'; // Va a ser el separador de los diferentes datos
 
     getline(archivo, linea); // Nos saltamos la primera fila que son solo los nombres de la tabla
 
     while (getline(archivo, linea))
     {
-        stringstream stream(linea);
-        string Grupo, CodigoBarras, Articulo, Deposito1, Deposito2, Deposito3, Deposito4, Deposito5;
         getline(stream, Grupo, delimitador);
         getline(stream, CodigoBarras, delimitador);
         getline(stream, Articulo, delimitador);
@@ -50,8 +49,8 @@ int main()
         getline(stream, Deposito5, delimitador);
 
         // funcion para minimo de stock
-        if (aux.MinimoStock(Deposito1, Deposito2, Deposito3, Deposito4, Deposito5, stockmin))
-            artmins.insertarUltimo(Articulo);
+        //if (aux.MinimoStock(Deposito1, Deposito2, Deposito3, Deposito4, Deposito5, stockmin))
+        //    artmins.insertarUltimo(Articulo);
 
         grupo.insertarUltimo(Grupo);
         barras.insertarUltimo(CodigoBarras);
@@ -67,21 +66,18 @@ int main()
     cout << "Hay " << cantArticulos << " articulos diferentes." << endl;
 
     // Cantidad total de art�culos
-    sumaProductos += Dep1.sumarDeposito();
-    sumaProductos += Dep2.sumarDeposito();
-    sumaProductos += Dep3.sumarDeposito();
-    sumaProductos += Dep4.sumarDeposito();
-    sumaProductos += Dep5.sumarDeposito();
+    sumaProductos += Dep1.sumarDeposito() + Dep2.sumarDeposito() + Dep3.sumarDeposito();
+    sumaProductos += Dep4.sumarDeposito() + Dep5.sumarDeposito();
     cout << "Hay " << sumaProductos << " articulos en total." << endl;
 
     cout << "Los elementos con minimo de stock son : " << endl;
     artmins.print();
 
-    clock_t end = clock();
+    end = clock();
 
-    double elapsed_secs = static_cast<double>(end - begin) / CLOCKS_PER_SEC;
+    elapsed_secs = static_cast<double>(end - begin) / CLOCKS_PER_SEC;
 
     cout << "Tardo elapsed_secs" << elapsed_secs << "\n"
-         << std::endl;
+         << endl;
     return 0;
 }
