@@ -46,8 +46,6 @@ public:
   void print2();
 
   int sumarDeposito();
-
-  bool MinimoStock(string dato1, string dato2, string dato3, string dato4, string dato5, int stockmin);
 };
 
 /**
@@ -313,28 +311,6 @@ int Lista<T>::sumarDeposito()
     count++; // Cantidad de articulos
   }
   return suma;
-}
-
-bool MinimoStock(string dato1, string dato2, string dato3, string dato4, string dato5, int stockmin)
-{
-  int valor;
-  bool bandera;
-
-  if (dato1 == "")
-    dato1 = "0";
-  if (dato2 == "")
-    dato2 = "0";
-  if (dato3 == "")
-    dato3 = "0";
-  if (dato4 == "")
-    dato4 = "0";
-  if (dato5 == "")
-    dato5 = "0";
-
-  valor = stoi(dato1) + stoi(dato2) + stoi(dato3) + stoi(dato4) + stoi(dato5);
-  bandera = valor <= stockmin;
-  
-  return bandera;
 }
 
 template <class T>

@@ -9,18 +9,39 @@
 
 using namespace std;
 
+bool MinimoStock(string dato1, string dato2, string dato3, string dato4, string dato5, int stockmin)
+{
+  int valor;
+  bool bandera;
+
+  if (dato1 == "")
+    dato1 = "0";
+  if (dato2 == "")
+    dato2 = "0";
+  if (dato3 == "")
+    dato3 = "0";
+  if (dato4 == "")
+    dato4 = "0";
+  if (dato5 == "")
+    dato5 = "0";
+
+  valor = stoi(dato1) + stoi(dato2) + stoi(dato3) + stoi(dato4) + stoi(dato5);
+  bandera = valor <= stockmin;
+  
+  return bandera;
+}
+
 int main()
 {
-    clock_t begin;
+    clock_t begin, end;
     ifstream archivo;
     int cantArticulos, sumaProductos = 0, stockmin;
-    Lista <string> grupo, barras, articulo, Dep1, Dep2, Dep3, Dep4, Dep5, aux, artmins;
-    string linea;
-    char delimitador = ';'; // Va a ser el separador de los diferentes datos
-    clock_t end;
+    Lista<string> grupo, barras, articulo, Dep1, Dep2, Dep3, Dep4, Dep5, aux, artmins;
+    string linea, Grupo, CodigoBarras, Articulo, Deposito1, Deposito2, Deposito3, Deposito4, Deposito5;
     stringstream stream(linea);
-    string Grupo, CodigoBarras, Articulo, Deposito1, Deposito2, Deposito3, Deposito4, Deposito5;
     double elapsed_secs;
+    char delimitador = ';'; // Va a ser el separador de los diferentes datos
+
     cout << "Comenzando a medir Tiempo\n"
          << endl;
 
@@ -32,8 +53,6 @@ int main()
     archivo.open("Inventariado Fisico.csv", ios::in); // Abrimos el archivo en modo lectura
     if (archivo.fail())                               // Notificamos en caso de error
         cout << "Error";
-
-
 
     getline(archivo, linea); // Nos saltamos la primera fila que son solo los nombres de la tabla
 
@@ -49,8 +68,8 @@ int main()
         getline(stream, Deposito5, delimitador);
 
         // funcion para minimo de stock
-        //if (aux.MinimoStock(Deposito1, Deposito2, Deposito3, Deposito4, Deposito5, stockmin))
-        //    artmins.insertarUltimo(Articulo);
+        if (MinimoStock(Deposito1, Deposito2, Deposito3, Deposito4, Deposito5, stockmin))
+            artmins.insertarUltimo(Articulo);
 
         grupo.insertarUltimo(Grupo);
         barras.insertarUltimo(CodigoBarras);
