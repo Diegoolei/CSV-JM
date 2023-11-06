@@ -45,7 +45,7 @@ public:
 
   void print2();
 
-  int sumarDeposito();
+  int get_total_art();
 };
 
 /**
@@ -291,26 +291,29 @@ void Lista<T>::print()
 }
 
 template <class T>
-int Lista<T>::sumarDeposito()
+int Lista<T>::get_total_art()
 {
-  Nodo<T> *aux;
-  int count, suma, valor;
-  aux = inicio;
-  count = 0, suma = 0;
+  string dato = "";
+  Nodo<T> *aux = inicio;
+  int total_art = 0, posActual = 0, pos_primer_deposito = 3; // 3 es la posicion del primer deposito
+  while (aux != nullptr && posActual < pos_primer_deposito) // llevo la lista a la posicion del primer deposito
+  {
+    aux = aux->getSiguiente();
+    posActual++;
+  }
 
   while (aux != nullptr)
   {
-    if (aux->getDato() == "")
+    dato = aux->getDato();
+    if (dato == "")  // Si el dato es vacio, no se suma
       aux = aux->getSiguiente();
     else
     {
-      valor = stoi(aux->getDato());
-      suma += valor;
+      total_art += stoi(dato);
       aux = aux->getSiguiente();
     }
-    count++; // Cantidad de articulos
   }
-  return suma;
+  return total_art;
 }
 
 template <class T>

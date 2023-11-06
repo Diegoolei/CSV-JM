@@ -2,9 +2,9 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
-#include "Lista/Lista.h" // Para la lista de articulos, incluye stdlib.h
+#include "Lista/Lista.h"                                    // Para la lista de articulos, incluye stdlib.h
 // #include "Lista/CircList.h"
-#include <algorithm> // Para contar la cantidad de delimitadores
+#include <algorithm>                                        // Para contar la cantidad de delimitadores
 using namespace std;
 
 bool MinimoStock(string dato1, string dato2, string dato3, string dato4, string dato5, int stockmin)
@@ -29,17 +29,17 @@ bool MinimoStock(string dato1, string dato2, string dato3, string dato4, string 
   return bandera;
 }
 
+
 int main()
 {
     clock_t begin, end;
     ifstream archivo;
-    int cantArticulos, stockmin, cant_depositos;
-    Lista<string> grupo, barras, articulo, Dep1, Dep2, Dep3, Dep4, Dep5, aux, artmins;
-    string linea, Grupo, CodigoBarras, Articulo, Deposito1, Deposito2, Deposito3, Deposito4, Deposito5;
-    stringstream stream(linea);
+    int stockmin, cant_depositos, cant_columnas_csv;
+    Lista<string> *datos_linea = new Lista<string>();       // Inicializo la lista que va a contener los datos de cada linea
+    string linea, dato_auxiliar;
     double elapsed_secs;
-    char delimitador = ';'; // Va a ser el separador de los diferentes datos
-    int sumaProductos = 0, total_art_dif = 0;
+    char delimitador = ';';                                 // Va a ser el separador de los diferentes datos
+    int total_art_dif = 0, total_art = 0;
 
     cout << "Comenzando a medir Tiempo\n"
          << endl;
@@ -49,48 +49,36 @@ int main()
     printf("Cual va a ser el stock minimo: ");
     cin >> stockmin;
 
-    archivo.open("Inventariado Fisico.csv", ios::in); // Abrimos el archivo en modo lectura
-    if (archivo.fail())                               // Notificamos en caso de error
+    archivo.open("Inventariado Fisico.csv", ios::in);       // Abrimos el archivo en modo lectura
+    if (archivo.fail())                                     // Notificamos en caso de error
         cout << "Error";
 
-    getline(archivo, linea); // Usamos la primera fila del CSV para saber cuantos depósitos hay
-    cant_depositos = count(linea.begin(), linea.end(), delimitador) - 3; // Se resta 3 porque son 3 columnas que no son depositos
+    getline(archivo, linea);                                // Usamos la primera fila del CSV para saber cuantos depósitos hay
+    cant_columnas_csv = count(linea.begin(), linea.end(), delimitador);
+    cant_depositos = cant_columnas_csv - 2;                 // Se resta 2 porque son 3 columnas que no son depositos
+    cout << "Hay " << cant_depositos << " depositos." << endl;
 
+    
     while (getline(archivo, linea))
     {
-        total_art_dif++; // Cantidad de articulos diferentes (igual a cant lineas en CSV)
-        
-        getline(stream, Grupo, delimitador);
-        getline(stream, CodigoBarras, delimitador);
-        getline(stream, Articulo, delimitador);
-        getline(stream, Deposito1, delimitador);
-        getline(stream, Deposito2, delimitador);
-        getline(stream, Deposito3, delimitador);
-        getline(stream, Deposito4, delimitador);
-        getline(stream, Deposito5, delimitador);
+        total_art_dif++;                                    // Cantidad de articulos diferentes (igual a cant lineas en CSV)
+        stringstream stream(linea);
+        for (int i = 0; i < cant_columnas_csv; i++)         // Bug conocido: No lee el último depósito, getline tiene comp. inesperado
+        {
+            getline(stream, dato_auxiliar, delimitador);    // Obtenemos el dato hasta el delimitador
+            datos_linea->insertarUltimo(dato_auxiliar);     // Insertamos el dato en la lista
+        }   
+        total_art += datos_linea->get_total_art();          // Sumamos la cantidad de articulos de la linea
+        datos_linea->vaciar();                              // Vaciamos la lista para la proxima linea
 
-        // funcion para minimo de stock
-        if (MinimoStock(Deposito1, Deposito2, Deposito3, Deposito4, Deposito5, stockmin))
-            artmins.insertarUltimo(Articulo);
-
-        grupo.insertarUltimo(Grupo);
-        barras.insertarUltimo(CodigoBarras);
-        articulo.insertarUltimo(Articulo);
-        Dep1.insertarUltimo(Deposito1);
-        Dep2.insertarUltimo(Deposito2);
-        Dep3.insertarUltimo(Deposito3);
-        Dep4.insertarUltimo(Deposito4);
-        Dep5.insertarUltimo(Deposito5);
     }
-    cout << "Hay " << total_art_dif << " articulos diferentes." << endl;
 
-    // Cantidad total de art�culos
-    sumaProductos += Dep1.sumarDeposito() + Dep2.sumarDeposito() + Dep3.sumarDeposito();
-    sumaProductos += Dep4.sumarDeposito() + Dep5.sumarDeposito();
-    cout << "Hay " << sumaProductos << " articulos en total." << endl;
+    archivo.close(); // Cerramos el archivo
+
+    cout << "Hay " << total_art_dif << " articulos diferentes." << endl;
+    cout << "Hay " << total_art << " articulos en total." << endl;
 
     cout << "Los elementos con minimo de stock son : " << endl;
-    artmins.print();
 
     end = clock();
 
