@@ -2,11 +2,9 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
-#include "Lista/Lista.h"
-#include "Lista/CircList.h"
-// La libreria de abajo nos sirve para poder crear los arreglos din�micos (tiene new y delete)
-#include <stdlib.h>
-
+#include "Lista/Lista.h" // Para la lista de articulos, incluye stdlib.h
+// #include "Lista/CircList.h"
+#include <algorithm> // Para contar la cantidad de delimitadores
 using namespace std;
 
 bool MinimoStock(string dato1, string dato2, string dato3, string dato4, string dato5, int stockmin)
@@ -35,12 +33,13 @@ int main()
 {
     clock_t begin, end;
     ifstream archivo;
-    int cantArticulos, sumaProductos = 0, stockmin;
+    int cantArticulos, stockmin, cant_depositos;
     Lista<string> grupo, barras, articulo, Dep1, Dep2, Dep3, Dep4, Dep5, aux, artmins;
     string linea, Grupo, CodigoBarras, Articulo, Deposito1, Deposito2, Deposito3, Deposito4, Deposito5;
     stringstream stream(linea);
     double elapsed_secs;
     char delimitador = ';'; // Va a ser el separador de los diferentes datos
+    int sumaProductos = 0, total_art_dif = 0;
 
     cout << "Comenzando a medir Tiempo\n"
          << endl;
@@ -54,10 +53,13 @@ int main()
     if (archivo.fail())                               // Notificamos en caso de error
         cout << "Error";
 
-    getline(archivo, linea); // Nos saltamos la primera fila que son solo los nombres de la tabla
+    getline(archivo, linea); // Usamos la primera fila del CSV para saber cuantos depósitos hay
+    cant_depositos = count(linea.begin(), linea.end(), delimitador) - 3; // Se resta 3 porque son 3 columnas que no son depositos
 
     while (getline(archivo, linea))
     {
+        total_art_dif++; // Cantidad de articulos diferentes (igual a cant lineas en CSV)
+        
         getline(stream, Grupo, delimitador);
         getline(stream, CodigoBarras, delimitador);
         getline(stream, Articulo, delimitador);
@@ -80,9 +82,7 @@ int main()
         Dep4.insertarUltimo(Deposito4);
         Dep5.insertarUltimo(Deposito5);
     }
-    // Cantidad total de art�culos diferentes
-    cantArticulos = articulo.getTamanio();
-    cout << "Hay " << cantArticulos << " articulos diferentes." << endl;
+    cout << "Hay " << total_art_dif << " articulos diferentes." << endl;
 
     // Cantidad total de art�culos
     sumaProductos += Dep1.sumarDeposito() + Dep2.sumarDeposito() + Dep3.sumarDeposito();
